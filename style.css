@@ -1,0 +1,478 @@
+/*
+ * Made by Erik Terwan
+ * 24th of November 2015
+ * MIT License
+ *
+ *
+ * If you are thinking of using this in
+ * production code, beware of the browser
+ * prefixes.
+ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+
+  /* make it look decent enough */
+  background: #232323;
+  color: #cdcdcd;
+  font-family: "Avenir Next", "Avenir", sans-serif;
+}
+
+#menuToggle {
+  display: block;
+  position: relative;
+  top: 50px;
+  /* left: 50px; */
+
+  z-index: 1;
+
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+#menuToggle a {
+  text-decoration: none;
+  color: #232323;
+
+  transition: color 0.3s ease;
+}
+
+#menuToggle a:hover {
+  color: tomato;
+}
+
+#menuToggle input {
+  display: block;
+  width: 40px;
+  height: 32px;
+  position: absolute;
+  top: -7px;
+  left: -5px;
+
+  cursor: pointer;
+
+  opacity: 0; /* hide this */
+  z-index: 2; /* and place it over the hamburger */
+
+  -webkit-touch-callout: none;
+}
+
+/*
+  * Just a quick hamburger
+  */
+#menuToggle span {
+  display: block;
+  width: 33px;
+  height: 4px;
+  margin-bottom: 5px;
+  position: relative;
+
+  background: #cdcdcd;
+  border-radius: 3px;
+
+  z-index: 1;
+
+  transform-origin: 4px 0px;
+
+  transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1),
+    background 0.5s cubic-bezier(0.77, 0.2, 0.05, 1), opacity 0.55s ease;
+}
+
+#menuToggle span:first-child {
+  transform-origin: 0% 0%;
+}
+
+#menuToggle span:nth-last-child(2) {
+  transform-origin: 0% 100%;
+}
+
+/* 
+  * Transform all the slices of hamburger
+  * into a crossmark.
+  */
+#menuToggle input:checked ~ span {
+  opacity: 1;
+  transform: rotate(45deg) translate(-2px, -1px);
+  background: #232323;
+}
+
+/*
+  * But let's hide the middle one.
+  */
+#menuToggle input:checked ~ span:nth-last-child(3) {
+  opacity: 0;
+  transform: rotate(0deg) scale(0.2, 0.2);
+}
+
+/*
+  * Ohyeah and the last one should go the other direction
+  */
+#menuToggle input:checked ~ span:nth-last-child(2) {
+  transform: rotate(-45deg) translate(0, -1px);
+}
+
+/*
+  * Make this absolute positioned
+  * at the top left of the screen
+  */
+#menu {
+  position: absolute;
+  width: 300px;
+  margin: -100px 0 0 -50px;
+  padding: 50px;
+  padding-top: 125px;
+
+  background: #ededed;
+  list-style-type: none;
+  -webkit-font-smoothing: antialiased;
+  /* to stop flickering of text in safari */
+
+  transform-origin: 0% 0%;
+  transform: translate(-100%, 0);
+
+  transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1);
+}
+
+#menu li {
+  padding: 10px 0;
+  font-size: 22px;
+}
+
+/*
+  * And let's slide it in from the left
+  */
+#menuToggle input:checked ~ ul {
+  transform: none;
+}
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+h1 {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+body {
+  --flexDirection: column;
+  /* --padding: 400px 0; */
+  font-family: helvetica;
+  background: linear-gradient(to bottom, #e9e9f3 0%, #ffffff 100%);
+  background: rgb(84 104 255 / 80%);
+  /* padding: var(--padding); */
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: center; */
+  padding: 10px;
+}
+
+.scene {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  flex: 0 1 80%;
+  margin-top: 50px;
+  /* overflow: scroll; */
+}
+
+@media (min-width: 620px) {
+  body {
+    --flexDirection: row;
+    --padding: 0 3em;
+  }
+}
+
+/* 3D CSS book 
+*---------------
+* DOM: 
+<div class="container">
+  <a href="#" class="book">
+    <div class="cover" 
+      data-icon='url'
+      data-pattern='url'
+      data-title='title'>
+      <div class="cover-icon"></div>
+      <div class="cover-title"></div>
+    </div>
+  </a>
+</div>
+*/
+
+.container {
+  perspective: 900px;
+  display: flex;
+  flex-grow: 1;
+  width: 100%;
+  justify-content: center;
+  margin: 50px;
+}
+
+.book {
+  /* Setup variables 
+  *  Mobile firs approach, override these
+  *  at the end in a media query
+  */
+  --rotation: 18deg;
+  --scale: 0.8;
+  --width: 150px;
+  --height: 200px;
+  --fontSize: 0.9em;
+  --coverBackground: 255 255 255;
+  --titleColor: #36395a;
+  --4thBackground: #b6b7d5;
+
+  width: var(--width);
+  height: var(--height);
+  transform: rotate3d(0, 1, 0, var(--rotation)) translateZ(-50px)
+    scale(var(--scale));
+  transform-origin: center center;
+  transition: transform 0.2s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.book:hover {
+  --rotation: 30deg;
+  --4thBackground: #d6d6e7; /* GREY 100 */
+}
+
+.book:active {
+  --rotation: 20deg;
+  --scale: 0.78;
+  --4thBackground: #d6d6e7; /* GREY 100 */
+}
+
+/* Book Shadow */
+.book:before {
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: -60px;
+  height: 60px;
+  width: 100%;
+  background: rgb(0 0 0 / 55%);
+  border-radius: 0;
+  filter: blur(40px);
+  z-index: -1;
+  /* enable hardware acceleration to avoid visual glitches */
+  transform: translate3d(-34px, 0, -40px);
+}
+
+/* 4th cover */
+.book:after {
+  content: "";
+  display: block;
+  height: var(--height);
+  width: 60px;
+  background: var(--4thBackground);
+  transform: rotateY(-90deg) translateZ(30px);
+  transition: background-color 0.2s ease;
+  will-change: background-color;
+}
+
+.book .cover {
+  background: linear-gradient(to top, #e9e9f3 0%, #ffffff 100%);
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  transform: translateZ(30px);
+}
+
+/* Gradient from bottom to top */
+.book .cover:before {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to top,
+    rgb(var(--coverBackground)),
+    rgb(var(--coverBackground) / 80%),
+    rgb(var(--coverBackground) / 60%),
+    rgb(var(--coverBackground) / 0%),
+    rgb(var(--coverBackground) / 0%)
+  );
+  z-index: 1;
+}
+
+.book .cover .cover-icon {
+  width: calc(100% - 64px);
+  height: 66%;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-items: flex-end;
+  margin: auto;
+}
+
+.book .cover .cover-title {
+  width: calc(100% - 64px);
+  height: 33%;
+  position: relative;
+  z-index: 2;
+  align-self: flex-end;
+  justify-self: flex-end;
+  display: flex;
+  font-size: var(--fontSize);
+  font-weight: bold;
+  color: var(--titleColor);
+  padding-bottom: 1em;
+  z-index: 2;
+  margin: auto;
+  backface-visibility: hidden;
+}
+
+/* Top book pattern */
+.book .cover .pattern {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: 200%;
+}
+.book .cover .icon {
+  width: 64px;
+  height: 64px;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  transform: translateY(-16px);
+  z-index: 3;
+}
+
+@media (min-width: 780px) {
+  .book {
+    --width: 150px;
+    --height: 200px;
+    --fontSize: 0.9em;
+    --scale: 1;
+  }
+
+  .book:active {
+    --scale: 0.95;
+  }
+}
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.swiper {
+  margin-left: auto;
+  margin-right: auto;
+}
+/*
+ CSS for the main interaction
+*/
+.tabset > input[type="radio"] {
+  position: absolute;
+  left: -200vw;
+}
+
+.tabset .tab-panel {
+  display: none;
+}
+
+.tabset > input:first-child:checked ~ .tab-panels > .tab-panel:first-child,
+.tabset > input:nth-child(3):checked ~ .tab-panels > .tab-panel:nth-child(2),
+.tabset > input:nth-child(5):checked ~ .tab-panels > .tab-panel:nth-child(3),
+.tabset > input:nth-child(7):checked ~ .tab-panels > .tab-panel:nth-child(4),
+.tabset > input:nth-child(9):checked ~ .tab-panels > .tab-panel:nth-child(5),
+.tabset > input:nth-child(11):checked ~ .tab-panels > .tab-panel:nth-child(6) {
+  display: block;
+}
+
+/*
+   Styling
+  */
+/* body {
+  font: 16px/1.5em "Overpass", "Open Sans", Helvetica, sans-serif;
+  color: #333;
+  font-weight: 300;
+} */
+
+.tabset > label {
+  position: relative;
+  display: inline-block;
+  padding: 20px 20px 30px;
+  border: 1px solid transparent;
+  border-bottom: 0;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.tabset > label::after {
+  content: "";
+  position: absolute;
+  left: 15px;
+  bottom: 10px;
+  width: 22px;
+  height: 4px;
+  background: #8d8d8d;
+}
+
+.tabset > label:hover,
+.tabset > input:focus + label {
+  color: #06c;
+}
+
+.tabset > label:hover::after,
+.tabset > input:focus + label::after,
+.tabset > input:checked + label::after {
+  background: #06c;
+}
+
+.tabset > input:checked + label {
+  border-color: #ccc;
+  border-bottom: 1px solid #fff;
+  margin-bottom: -1px;
+}
+
+.tab-panel {
+  padding: 30px 0;
+  border-top: 1px solid #ccc;
+}
+
+/*
+   Demo purposes only
+  */
+
+.tabset {
+  margin-top: 20px;
+}
